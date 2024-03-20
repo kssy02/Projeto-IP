@@ -9,15 +9,18 @@ from Background import *
 from Sprites import *
 from Player import Player
 from Collision import *
+from inicializacao import *
 
 pygame.init()
 pygame.display.set_caption("Platformer")
 pygame.mixer.init()
 
+controle= 0
 music = pygame.mixer.music.load("metallica_fight_fire_with_fire.wav")
 pygame.mixer.music.play(-1)
 
 def main(window):
+    global controle
     clock = pygame.time.Clock()
     background, bg_image = get_background("Purple.png") # bg_image é a imagem de fundo 
 
@@ -60,18 +63,19 @@ def main(window):
                     player.jump()
                 if player.alive == False and  event.key == pygame.K_RETURN:
                     main(window)
-                    
-                    
-
-                    
-                    
-        flag.loop()
-        player.loop(FPS)
-        fire.loop()
-        fire1.loop()
-        handle_move(player, objects)
-        #collectible_handle_move(player, collectible)
-        draw(window, background, bg_image, player, objects, offset_x, collectible) #chamando a def do fundo 
+                if event.key == pygame.K_RETURN:
+                    controle+=1
+                    main(window)
+        if controle == 0:
+            iniciar_tela()
+        else:
+            flag.loop()
+            player.loop(FPS)
+            fire.loop()
+            fire1.loop()
+            handle_move(player, objects)
+            #collectible_handle_move(player, collectible)
+            draw(window, background, bg_image, player, objects, offset_x, collectible) #chamando a def do fundo 
 
         if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or ((player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
             offset_x += player.x_vel
