@@ -35,6 +35,7 @@ def main(window):
     
     floor = [Block(i * block_size, HEIGHT - block_size, block_size)
              for i in range(-WIDTH // block_size, (WIDTH * 2) // block_size)]
+
     objects = [*floor, Block(0, HEIGHT - block_size * 2, block_size),  
                Block(block_size * 3, HEIGHT - block_size * 3.5, block_size), 
                fire,fire1,
@@ -57,17 +58,22 @@ def main(window):
             if event.type == pygame.KEYDOWN: #checando se tem uma tecla pressionada
                 if event.key == pygame.K_SPACE and player.jump_count < 2: #se a tecla for espaço e o contador dos nossos pulos for menor que dois, vai poder pular duas vezes
                     player.jump()
+                if player.alive == False and  event.key == pygame.K_RETURN:
+                    main(window)
+                    
+                    
 
+                    
+                    
         flag.loop()
         player.loop(FPS)
         fire.loop()
         fire1.loop()
         handle_move(player, objects)
-        collectible_handle_move(player, collectible)
+        #collectible_handle_move(player, collectible)
         draw(window, background, bg_image, player, objects, offset_x, collectible) #chamando a def do fundo 
 
-        if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or (
-                (player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
+        if ((player.rect.right - offset_x >= WIDTH - scroll_area_width) and player.x_vel > 0) or ((player.rect.left - offset_x <= scroll_area_width) and player.x_vel < 0):
             offset_x += player.x_vel
 
     pygame.quit()
